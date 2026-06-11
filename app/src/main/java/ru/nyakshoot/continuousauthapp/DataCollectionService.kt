@@ -27,7 +27,6 @@ import ru.nyakshoot.continuousauthapp.pipeline.AuthPipeline
 import ru.nyakshoot.continuousauthapp.pipeline.ContextSnapshot
 import ru.nyakshoot.continuousauthapp.pipeline.FeatureExtractor
 import java.io.FileWriter
-import androidx.core.content.edit
 
 class DataCollectionService : Service() {
 
@@ -40,7 +39,7 @@ class DataCollectionService : Service() {
     private var scenario: String = "static"
 
     // ── Pipeline ──────────────────────────────────────────────────────────────
-    private var authPipeline: AuthPipeline? = null
+    internal var authPipeline: AuthPipeline? = null
 
     /** Последние значения гироскопа — обновляются в onSensorChanged. */
     private val lastGyro = FloatArray(3)
@@ -71,8 +70,9 @@ class DataCollectionService : Service() {
     private val pipelineTicker = object : Runnable {
         override fun run() {
             if (!isCollecting) return
-            authPipeline?.processWindow(lastContextSnapshot)?.let { record ->
-                logger?.log("auth_decision", authPipeline!!.recordToJson(record))
+            val pipeline = authPipeline
+            pipeline?.processWindow(lastContextSnapshot)?.let { record ->
+                logger?.log("auth_decision", pipeline.recordToJson(record))
                 // Уведомляем UI о решении
                 sendBroadcast(Intent(ACTION_AUTH_DECISION).apply {
                     putExtra(EXTRA_DECISION,  record.decision.name)
@@ -324,12 +324,12 @@ class DataCollectionService : Service() {
     }
 
     private fun persistState(isRunning: Boolean) {
-        getSharedPreferences(/* name = */ PREFS_NAME, /* mode = */ MODE_PRIVATE).edit {
-            putBoolean(KEY_IS_COLLECTING, isRunning)
-                .putString(KEY_CURRENT_FILE, currentFilePath)
-                .putString(KEY_USER_TYPE, userType)
-                .putString(KEY_SCENARIO, scenario)
-        }
+        getSharedPreferences(PREFS_NAME, MODE_PRIVATE).edit()
+            .putBoolean(KEY_IS_COLLECTING, isRunning)
+            .putString(KEY_CURRENT_FILE,   currentFilePath)
+            .putString(KEY_USER_TYPE,      userType)
+            .putString(KEY_SCENARIO,       scenario)
+            .apply()
     }
 
     private fun tryRestoreSessionIfNeeded() {
