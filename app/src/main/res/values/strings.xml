@@ -1,0 +1,18 @@
+<resources>
+    <string name="app_name">ContinuousAuthApp</string>
+    <string name="collector_title">Continuous Auth Data Collector</string>
+    <string name="session_tag_hint">Session tag (optional)</string>
+    <string name="start_collection">Start collection</string>
+    <string name="stop_collection">Stop collection</string>
+    <string name="open_ime_settings">Enable keyboard</string>
+    <string name="show_ime_picker">Choose keyboard</string>
+    <string name="open_openboard_app">Open OpenBoard app</string>
+    <string name="openboard_status_unknown">OpenBoard status: unknown</string>
+    <string name="status_idle">Status: idle</string>
+    <string name="status_recording">Status: recording</string>
+    <string name="no_file_yet">File: not created yet</string>
+    <string name="typing_prompt">Keyboard modality: type free text below</string>
+    <string name="typing_hint">Type naturally: messages, random text, edits, backspaces</string>
+    <string name="gesture_prompt">Gesture modality: draw swipes/taps in area</string>
+    <string name="gesture_area_hint">Touch here to collect gesture dynamics</string>
+</resources>
